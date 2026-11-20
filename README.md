@@ -1,47 +1,49 @@
-# Đảo Đèn Lồng · Đêm 1: Đảo Bến
+# Đảo Đèn Lồng · Ba Đêm Giữ Sáng
 
-**Demo:** chưa quay trong môi trường làm việc này. Xem [bằng chứng Phase 1](docs/proof/phase-1.md).
+**Demo:** chưa quay video cho Phase 2; ảnh và kết quả kiểm chứng được ghi trong [`docs/proof/phase-2.md`](docs/proof/phase-2.md).
 
-Mây chạy quanh đảo trong đêm, nhặt đom đóm rồi nạp 3 đốm sáng vào mỗi Đèn Lồng Lớn. Bóng Mực đuổi theo; tỏa sáng bằng `Q` làm chúng choáng và đẩy lùi. Thắp đủ 5 đèn để thắng trước bình minh. Trúng đòn mất một tim và rơi một nửa số đom đóm đang mang. Tối đa 5 đốm sáng có thể mang cùng lúc.
+Mây chạy qua ba hòn đảo giữa biển mây, gom đom đóm và thắp các Đèn Lồng Lớn trước bình minh. Bóng Mực truy đuổi; Gió Lạc rình lấy đom đóm; Bùa Gió tăng tốc. Các đêm có cầu tre, bục phóng và đảo nhiều tầng.
 
 ## Chạy game
 
-Cần Python 3 để mở máy chủ tĩnh và trình duyệt hiện đại có WebGL. Từ thư mục dự án:
+Cần Python 3, Node.js 18 trở lên và trình duyệt có WebGL. Từ thư mục repo:
 
 ```sh
 python3 src/run.py
 ```
 
-Lệnh mở game trên trình duyệt mặc định. Game tải Three.js và Be Vietnam Pro từ CDN nên cần Internet lần đầu. Dừng máy chủ bằng `Ctrl+C`.
+Lệnh mở game trên trình duyệt mặc định. Three.js và Be Vietnam Pro được tải từ CDN nên cần Internet. Dừng máy chủ bằng `Ctrl+C`.
 
 ## Điều khiển
 
-- `WASD` hoặc phím mũi tên: di chuyển; kéo chuột trên màn hình để xoay hướng camera.
-- `Space`: nhảy.
-- `E`: nạp đom đóm vào đèn gần nhất khi đứng sát.
-- `Q`: tỏa sáng, tiêu hao 1 tim năng lượng; hồi chiêu 1 giây.
-- `R`: chơi lại sau khi thắng hoặc thua.
+- `WASD` / phím mũi tên: chạy; kéo chuột: xoay camera.
+- `Space`: nhảy; `Shift`: lướt; `E`: nạp đom đóm vào đèn; `Q`: Tỏa Sáng.
+- `Esc` / `P`: tạm dừng. Chơi lại trong màn hình kết quả hoặc menu tạm dừng.
+
+Mây mang tối đa 10 đom đóm. Mỗi đèn cần 10. Chạm Bóng Mực mất một Ngọn Lửa và rơi một nửa số đang mang. Tỏa Sáng tiêu hao một Ngọn Lửa. Bùa Gió kéo dài 10 giây, tăng tốc chạy và bỏ hồi chiêu Lướt.
 
 ## Điểm
 
-10 điểm mỗi đom đóm nhặt, 100 điểm mỗi đèn thắp, 25 điểm mỗi Bóng Mực bị choáng, cộng 1 điểm mỗi giây còn lại và 50 điểm mỗi tim còn lại khi thắng.
+10 điểm mỗi đom đóm nhặt, 100 mỗi đèn thắp, 5 mỗi Bóng Mực trúng Tỏa Sáng (kể cả đang choáng). Thắng một đêm cộng `floor(giây còn lại) × 2 + 50 × Ngọn Lửa còn lại`; tổng điểm giữ các đêm đã thắng.
 
-## Kiểm chứng headless
+## Chế độ headless và kiểm chứng
 
-Cần Node.js 18 trở lên. Chạy cú pháp và các kịch bản kiểm chứng:
+Mô phỏng 60 Hz chạy bằng Node.js, không cần cửa sổ hay GPU. Ví dụ:
 
 ```sh
-node --check src/game.mjs && node --check src/headless.mjs
 node tests/run.mjs
-node src/headless.mjs --seed 42 --night 1 --ticks 600 --out result.jsonl
+node src/headless.mjs --seed 42 --night 2 --ticks 21600 --out result.jsonl
 ```
 
-Có thể thêm `--scenario FILE --inputs FILE --snapshot-every N`. Định dạng, bước 60 Hz, JSONL và thông số đúng với `game.contract.json` / Test Contract v1.0. Mô phỏng headless không cần đồ họa hay GPU. Kịch bản mẫu trong `tests/fixtures/` kiểm tra nhặt-nạp-thắp, tỏa sáng, tính tất định và mã lỗi 2 với input sai.
+`--night` nhận 1, 2 hoặc 3; có thể nối `--scenario FILE`, `--inputs FILE`, `--snapshot-every N`. Schema v1.1 và thông số đã chọn nằm trong [`game.contract.json`](game.contract.json). Các scenario headless kiểm tra hồi quy Phase 1, lướt, bùa, bục phóng, Gió Lạc, pause, lịch sinh kẻ địch, gió, bản đồ và thắng/thua.
 
 ## Sáng tạo của tôi
 
-Đảo có cụm cây phát sáng nhẹ, đường bờ nổi, Mây đội nón lá và cầm đèn nhỏ; biểu tượng HUD và hiệu ứng sương tạo sắc thái cổ tích. Đây là hình khối và chất liệu tự dựng, tắt hoàn toàn trong headless. Kiểm tra hồi quy ở `tests/run.mjs` xác nhận đầu ra headless vẫn tất định và các luật lõi hoạt động.
+Ba bản đồ dùng bảng màu chàm, ngọc lam và vàng hổ phách; hình khối cây, đèn và nhân vật được dựng trong Three.js. Đêm 2 có cầu tre qua biển mây; Đêm 3 có vành cao, thềm chuông và dốc đá. Hệ thống âm thanh dùng Web Audio nên không cần tải nhạc/hiệu ứng bên ngoài. Các phần trang trí không tham gia mô phỏng headless.
 
-## Giả định & ghi chép
+## Tài liệu Phase 2
 
-Thông số vận hành, giả định và kết quả kiểm chứng: [docs/proof/phase-1.md](docs/proof/phase-1.md). Nhật ký AI và retro: [docs/notes/phase-1.md](docs/notes/phase-1.md).
+- Spec và tiêu chí nghiệm thu: [`docs/spec/phase-2.md`](docs/spec/phase-2.md)
+- Bằng chứng và kết quả chạy: [`docs/proof/phase-2.md`](docs/proof/phase-2.md)
+- Giả định, nhật ký AI và retro: [`docs/notes/phase-2.md`](docs/notes/phase-2.md)
+- Credits và giấy phép: [`CREDITS.md`](CREDITS.md), [`LICENSE`](LICENSE)
