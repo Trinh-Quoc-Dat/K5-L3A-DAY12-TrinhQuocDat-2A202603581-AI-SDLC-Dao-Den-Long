@@ -1,38 +1,38 @@
-# Phase 2 · Verification evidence
+# Phase 2 · Bằng chứng kiểm chứng
 
-Run `node tests/run.mjs` to recreate the headless evidence. The runner creates outputs in the operating system's temporary folder and checks the JSON values/events directly; it does not edit output by hand.
+Chạy `node tests/run.mjs` để tạo lại bằng chứng headless. Bộ chạy kiểm thử tạo các tệp đầu ra trong thư mục tạm của hệ điều hành và kiểm tra trực tiếp các giá trị/sự kiện JSON; không chỉnh sửa thủ công các tệp đầu ra.
 
-## Acceptance matrix
+## Bảng nghiệm thu
 
-| Requirement | Evidence | Result |
+| Yêu cầu | Bằng chứng | Kết quả |
 |---|---|---|
-| Fixed tick, snapshot tick 0, seeded deterministic output, JSONL end | Repeated seed 77 run for 240 ticks; compare output bytes | Pass |
-| Pickup, deposit and light; Phase 1 event/data continuity | `pickup_scenario.json`, `pickup_inputs.json` | Pass |
-| Pulse stuns shades, including an initially stunned target; cooldown and score | `pulse_scenario.json`, `pulse_inputs.json` | Pass |
-| Night victory and no-flame loss; `player_hit.lost` | `win_*` and `hit_scenario.json` | Pass |
-| Dash direction, 14 m/s × 12 ticks, cooldown | `dash_*` | Pass |
-| Night 2 charm pickup and timer | `charm_scenario.json` | Pass |
-| Night 2 jump pad reaches island B with grounded landing | `pad_scenario.json`, 85-tick run | Pass |
-| Gió Lạc steals up to 3, and pulse drops carried motes | `drifter_scenario.json`, `drifter_drop_scenario.json` | Pass |
-| Pause/resume event and frozen `sim_tick` | `pause_*`, snapshots at ticks 1 and 5 | Pass |
-| Night 1/2/3 lantern and mote layouts; Night 3 home spawn | default map snapshots | Pass |
-| Night 1 first shade wave; spawn IDs and count | `schedule_scenario.json`, 300-tick run | Pass |
-| Night 3 wind timing and selected direction | `night3_scenario.json`, 1,800-tick run | Pass |
-| Input/scenario malformed JSON shape returns exit 2 | duplicate input ticks and invalid player vector | Pass |
-| 3D menu, Night 1 scene, live HUD and browser console | A prior browser check exposed a missing `DT` import that stopped the render loop; fixed in follow-up commit, fresh browser verification still pending | Needs manual check |
+| Tick cố định, snapshot tick 0, đầu ra tất định theo seed, dòng kết thúc JSONL | Chạy lặp lại với seed 77 trong 240 tick; so sánh từng byte đầu ra | Đạt |
+| Nhặt đom đóm, nạp và thắp đèn; giữ nguyên sự kiện/dữ liệu Phase 1 | `pickup_scenario.json`, `pickup_inputs.json` | Đạt |
+| Tỏa Sáng làm choáng Bóng Mực, kể cả mục tiêu ban đầu đã choáng; hồi chiêu và điểm | `pulse_scenario.json`, `pulse_inputs.json` | Đạt |
+| Thắng Đêm và thua khi hết Ngọn Lửa; có `player_hit.lost` | `win_*` và `hit_scenario.json` | Đạt |
+| Hướng lướt, tốc độ 14 m/s trong 12 tick, hồi chiêu | `dash_*` | Đạt |
+| Nhặt bùa ở Đêm 2 và bộ đếm thời gian | `charm_scenario.json` | Đạt |
+| Bệ phóng ở Đêm 2 đưa người chơi tới đảo B và tiếp đất vững | `pad_scenario.json`, chạy 85 tick | Đạt |
+| Gió Lạc lấy tối đa 3 đom đóm; Tỏa Sáng làm rơi đom đóm đang mang | `drifter_scenario.json`, `drifter_drop_scenario.json` | Đạt |
+| Sự kiện tạm dừng/tiếp tục và `sim_tick` được đóng băng | `pause_*`, snapshot ở tick 1 và 5 | Đạt |
+| Bố cục đèn và đom đóm của Đêm 1/2/3; vị trí xuất phát tại nhà ở Đêm 3 | Snapshot bản đồ mặc định | Đạt |
+| Đợt Bóng Mực đầu tiên ở Đêm 1; ID và số lượng xuất hiện | `schedule_scenario.json`, chạy 300 tick | Đạt |
+| Thời điểm gió và hướng được chọn ở Đêm 3 | `night3_scenario.json`, chạy 1.800 tick | Đạt |
+| JSON đầu vào/scenario sai cấu trúc trả mã thoát 2 | Tick đầu vào bị trùng và vector người chơi không hợp lệ | Đạt |
+| Menu 3D, cảnh Đêm 1, HUD trực tiếp và bảng điều khiển trình duyệt | Lần kiểm tra trình duyệt trước phát hiện thiếu import `DT` khiến vòng lặp dựng hình dừng; đã sửa trong commit tiếp theo, vẫn cần kiểm tra lại trên trình duyệt | Cần kiểm tra thủ công |
 
-## Full headless duration
+## Thời lượng headless đầy đủ
 
-The Node.js simulation ran Night 3 through 18,000 steps (300 seconds) and wrote JSONL in **0.21 seconds** in the local measurement. Machine: Windows x64, Node.js v24.22.3, Intel Core i7-11370H, 8 reported logical CPUs, 15.7 GiB RAM. Scenario `tests/fixtures/perf_scenario.json` disables pursuers/wind so the run reaches dawn instead of ending early from a loss. Reproduce with:
+Mô phỏng Node.js đã chạy Đêm 3 qua 18.000 bước (300 giây) và ghi JSONL trong **0,21 giây** theo phép đo cục bộ. Máy đo: Windows x64, Node.js v24.22.3, Intel Core i7-11370H, hệ điều hành báo cáo 8 luồng CPU logic, RAM 15,7 GiB. Scenario `tests/fixtures/perf_scenario.json` tắt các kẻ truy đuổi/gió để lượt chạy đến bình minh thay vì kết thúc sớm do thua. Chạy lại bằng:
 
 ```sh
 Measure-Command { node src/headless.mjs --seed 2026 --night 3 --ticks 21600 --snapshot-every 900 --scenario tests/fixtures/perf_scenario.json --out result.jsonl }
 ```
 
-## Visual check
+## Kiểm tra hình ảnh
 
-A prior local browser check displayed a static HUD over an empty canvas. The render loop referenced `DT` without importing it, so animation stopped on its first frame. The fix exports `DT` from `src/game.mjs` and imports it in `src/view.mjs`. Syntax checks, the 60 Hz export check, and the headless suite pass after the fix. The browser could not reconnect to a fresh local server in this environment, so a post-fix visual/FPS check remains outstanding. Open the current build with `python3 src/run.py` on a machine with Internet access to load Three.js from its CDN; confirm the island and player render and average at least 30 FPS.
+Trong lần kiểm tra trình duyệt cục bộ trước đây, HUD tĩnh hiện trên một canvas trống. Vòng lặp dựng hình tham chiếu `DT` nhưng không import nên hoạt ảnh dừng ngay ở khung hình đầu tiên. Lỗi đã được sửa bằng cách export `DT` từ `src/game.mjs` và import trong `src/view.mjs`. Sau khi sửa, kiểm tra cú pháp, kiểm tra export tần số 60 Hz và bộ kiểm thử headless đều đạt. Trình duyệt không kết nối lại được tới máy chủ cục bộ mới trong môi trường này, nên vẫn cần kiểm tra hình ảnh/FPS sau sửa lỗi. Trên máy có Internet, mở bản hiện tại bằng `python3 src/run.py` để tải Three.js từ CDN; xác nhận đảo và người chơi được dựng hình, đồng thời FPS trung bình đạt ít nhất 30.
 
-## Ticket assumptions
+## Giả định của Ticket
 
-The supplied ticket omitted the canonical tuning table and RGB rows it referenced. The user authorized original choices; all selected values and the Night 3 spawn choice are listed in [`../spec/phase-2.md`](../spec/phase-2.md). If the instructor later supplies a canonical table, compare it to `game.contract.json` and adjust before release.
+Ticket được cung cấp thiếu bảng thông số điều chỉnh và các dòng RGB chuẩn mà tài liệu có nhắc đến. Người dùng đã cho phép tự chọn thông số; mọi giá trị được chọn cùng vị trí xuất phát ở Đêm 3 đều được liệt kê trong [`../spec/phase-2.md`](../spec/phase-2.md). Nếu giảng viên cung cấp bảng chuẩn sau đó, hãy đối chiếu với `game.contract.json` và điều chỉnh trước khi phát hành.
