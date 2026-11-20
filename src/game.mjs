@@ -9,7 +9,8 @@ export const TUNING = {
   charm_duration_s: 10, charm_respawn_s: 45, drifter_speed: 7,
   score: { per_mote: 10, per_lantern: 100, per_pulse_hit: 5, per_second_left: 2, per_flame_left: 50 }
 };
-const DT=1/60, GRAVITY=20, SHADE_WARNING_TICKS=30, DROPPED_TTL_TICKS=900;
+export const DT=1/60;
+const GRAVITY=20, SHADE_WARNING_TICKS=30, DROPPED_TTL_TICKS=900;
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const isNight=n=>Number.isInteger(n)&&n>=1&&n<=3;
 const dist2=(a,b)=>Math.hypot(a[0]-b[0],a[2]-b[2]);

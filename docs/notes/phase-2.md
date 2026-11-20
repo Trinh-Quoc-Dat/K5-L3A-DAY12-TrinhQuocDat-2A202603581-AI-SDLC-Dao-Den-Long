@@ -14,6 +14,6 @@ Tệp ticket không chứa bảng tuning và RGB mà nó tham chiếu. Theo ch�
 ## Evaluation / retro
 
 - Test tự động bao phủ hồi quy Phase 1, đọc input lỗi, sự kiện, thời gian pause, lướt, bùa, bục phóng, Gió Lạc, ba map, gió và lịch sinh Bóng Mực.
-- CUA hiển thị menu và HUD nhưng canvas 3D trống; trình duyệt giữ stylesheet cũ và máy chủ local không khởi động lại được trong môi trường này. Đã ghi rõ phần kiểm tra trực quan còn thiếu trong bằng chứng, không báo đạt.
+- Người dùng gửi ảnh HUD tĩnh trên canvas trống. Tìm được vòng render dùng `DT` nhưng view chưa import; đã xuất hằng 60 Hz từ mô phỏng và import vào view. Kiểm tra cú pháp và headless đạt; chưa xác nhận trực quan sau sửa do browser automation không kết nối được local server trong phiên này.
 - Bài học: input contract cần tách `tick` khỏi `sim_tick`; pause và cooldown phải được kiểm tra bằng snapshot quanh ranh giới tick. Tối ưu không cần package engine cho phép benchmark 18.000 tick trong thời gian ngắn.
 - Nếu làm lại, sẽ yêu cầu giữ bảng tuning/RGB đầy đủ trong ticket trước lúc bắt đầu để tránh chọn giả định thay cho số chuẩn của đề.

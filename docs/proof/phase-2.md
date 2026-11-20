@@ -19,7 +19,7 @@ Run `node tests/run.mjs` to recreate the headless evidence. The runner creates o
 | Night 1 first shade wave; spawn IDs and count | `schedule_scenario.json`, 300-tick run | Pass |
 | Night 3 wind timing and selected direction | `night3_scenario.json`, 1,800-tick run | Pass |
 | Input/scenario malformed JSON shape returns exit 2 | duplicate input ticks and invalid player vector | Pass |
-| 3D menu, Night 1 scene, live HUD and browser console | Local browser check showed the menu and HUD, but the 3D canvas was blank in this environment; visual acceptance remains unverified | Needs manual check |
+| 3D menu, Night 1 scene, live HUD and browser console | A prior browser check exposed a missing `DT` import that stopped the render loop; fixed in follow-up commit, fresh browser verification still pending | Needs manual check |
 
 ## Full headless duration
 
@@ -31,7 +31,7 @@ Measure-Command { node src/headless.mjs --seed 2026 --night 3 --ticks 21600 --sn
 
 ## Visual check
 
-A local browser session displayed the menu and HUD at 1280×720, but its canvas remained blank. The session kept an old cached stylesheet after the fix and could not reconnect to the restarted local server. Therefore the 3D visuals, browser console, FPS, score/carry UI updates and manual playthrough have not been verified here. Headless simulations cover the three maps and gameplay outcomes; manually open the current build with `python3 src/run.py` on a machine with Internet access to load Three.js from its CDN, then verify the rendered scene and 30 FPS target before treating visual acceptance as complete.
+A prior local browser check displayed a static HUD over an empty canvas. The render loop referenced `DT` without importing it, so animation stopped on its first frame. The fix exports `DT` from `src/game.mjs` and imports it in `src/view.mjs`. Syntax checks, the 60 Hz export check, and the headless suite pass after the fix. The browser could not reconnect to a fresh local server in this environment, so a post-fix visual/FPS check remains outstanding. Open the current build with `python3 src/run.py` on a machine with Internet access to load Three.js from its CDN; confirm the island and player render and average at least 30 FPS.
 
 ## Ticket assumptions
 
