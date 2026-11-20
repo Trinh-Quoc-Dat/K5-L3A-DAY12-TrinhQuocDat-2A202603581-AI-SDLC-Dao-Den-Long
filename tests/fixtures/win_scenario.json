@@ -1,1 +1,1 @@
-{"player":{"pos":[0,0,0],"carried":50,"flames":3},"random_motes":false,"random_shades":false,"motes":[],"shades":[],"lanterns":[{"id":"L1","pos":[0,0,0]},{"id":"L2","pos":[0,0,0]},{"id":"L3","pos":[0,0,0]},{"id":"L4","pos":[0,0,0]},{"id":"L5","pos":[0,0,0]}],"time_left_s":60}
+{"player":{"pos":[0,0,0],"carried":0,"flames":3},"random_motes":false,"random_shades":false,"motes":[],"shades":[],"lanterns":[{"id":"L1","lit":true,"fuel":100},{"id":"L2","lit":true,"fuel":100},{"id":"L3","lit":true,"fuel":100}],"time_left_s":0.0166666666667}
